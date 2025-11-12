@@ -15,6 +15,7 @@ interface Mention {
   sentiment: 'positive' | 'negative' | 'neutral';
   engagement: number;
   timestamp: string;
+  views: number;
 }
 
 const mockMentions: Mention[] = [
@@ -25,7 +26,8 @@ const mockMentions: Mention[] = [
     content: 'Поддерживаю инициативу партии! Важно отстаивать интересы трудящихся.',
     sentiment: 'positive',
     engagement: 1243,
-    timestamp: '2025-11-12 14:32'
+    timestamp: '2025-11-12 14:32',
+    views: 12450
   },
   {
     id: '2',
@@ -34,7 +36,8 @@ const mockMentions: Mention[] = [
     content: 'Не согласна с некоторыми решениями, нужен более взвешенный подход.',
     sentiment: 'negative',
     engagement: 567,
-    timestamp: '2025-11-12 13:15'
+    timestamp: '2025-11-12 13:15',
+    views: 8920
   },
   {
     id: '3',
@@ -43,7 +46,8 @@ const mockMentions: Mention[] = [
     content: 'Интересная позиция по социальным вопросам.',
     sentiment: 'neutral',
     engagement: 234,
-    timestamp: '2025-11-12 12:08'
+    timestamp: '2025-11-12 12:08',
+    views: 5670
   },
   {
     id: '4',
@@ -52,7 +56,8 @@ const mockMentions: Mention[] = [
     content: 'Хорошая работа с избирателями! Продолжайте в том же духе.',
     sentiment: 'positive',
     engagement: 892,
-    timestamp: '2025-11-12 11:45'
+    timestamp: '2025-11-12 11:45',
+    views: 15230
   },
   {
     id: '5',
@@ -61,7 +66,8 @@ const mockMentions: Mention[] = [
     content: 'Посмотрим, что будет дальше.',
     sentiment: 'neutral',
     engagement: 445,
-    timestamp: '2025-11-12 10:22'
+    timestamp: '2025-11-12 10:22',
+    views: 7890
   }
 ];
 
@@ -285,6 +291,7 @@ export default function Index() {
                   <TableHead>Автор</TableHead>
                   <TableHead className="max-w-md">Содержание</TableHead>
                   <TableHead>Тональность</TableHead>
+                  <TableHead>Просмотры</TableHead>
                   <TableHead>Охват</TableHead>
                   <TableHead>Время</TableHead>
                 </TableRow>
@@ -299,6 +306,12 @@ export default function Index() {
                         <div className={`w-2 h-2 rounded-full ${getSentimentColor(mention.sentiment)}`}></div>
                         {getSentimentText(mention.sentiment)}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-1">
+                        <Icon name="Eye" className="h-4 w-4 text-muted-foreground" />
+                        <span>{mention.views.toLocaleString()}</span>
+                      </div>
                     </TableCell>
                     <TableCell>{mention.engagement.toLocaleString()}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{mention.timestamp}</TableCell>
