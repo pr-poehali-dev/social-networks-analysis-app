@@ -1,14 +1,283 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Icon from '@/components/ui/icon';
 
-const Index = () => {
+interface Mention {
+  id: string;
+  platform: string;
+  author: string;
+  content: string;
+  sentiment: 'positive' | 'negative' | 'neutral';
+  engagement: number;
+  timestamp: string;
+}
+
+const mockMentions: Mention[] = [
+  {
+    id: '1',
+    platform: 'Twitter',
+    author: '@techreviewer',
+    content: 'Отличный продукт! Рекомендую всем коллегам по индустрии.',
+    sentiment: 'positive',
+    engagement: 1243,
+    timestamp: '2025-11-12 14:32'
+  },
+  {
+    id: '2',
+    platform: 'Facebook',
+    author: 'Ivan Petrov',
+    content: 'Качество могло бы быть лучше, ожидал большего.',
+    sentiment: 'negative',
+    engagement: 567,
+    timestamp: '2025-11-12 13:15'
+  },
+  {
+    id: '3',
+    platform: 'VK',
+    author: 'Anna K.',
+    content: 'Интересное решение для бизнеса, присматриваюсь.',
+    sentiment: 'neutral',
+    engagement: 234,
+    timestamp: '2025-11-12 12:08'
+  },
+  {
+    id: '4',
+    platform: 'LinkedIn',
+    author: 'Sergey M.',
+    content: 'Впечатляющие результаты внедрения! Команда молодцы.',
+    sentiment: 'positive',
+    engagement: 892,
+    timestamp: '2025-11-12 11:45'
+  },
+  {
+    id: '5',
+    platform: 'Instagram',
+    author: '@business_insider',
+    content: 'Стандартное предложение на рынке.',
+    sentiment: 'neutral',
+    engagement: 445,
+    timestamp: '2025-11-12 10:22'
+  }
+];
+
+export default function Index() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterPlatform, setFilterPlatform] = useState('all');
+  const [filterSentiment, setFilterSentiment] = useState('all');
+
+  const getSentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case 'positive':
+        return 'bg-green-500';
+      case 'negative':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-400';
+    }
+  };
+
+  const getSentimentText = (sentiment: string) => {
+    switch (sentiment) {
+      case 'positive':
+        return 'Позитивная';
+      case 'negative':
+        return 'Негативная';
+      default:
+        return 'Нейтральная';
+    }
+  };
+
+  const filteredMentions = mockMentions.filter((mention) => {
+    const matchesSearch =
+      searchTerm === '' ||
+      mention.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mention.author.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesPlatform = filterPlatform === 'all' || mention.platform === filterPlatform;
+    const matchesSentiment = filterSentiment === 'all' || mention.sentiment === filterSentiment;
+    return matchesSearch && matchesPlatform && matchesSentiment;
+  });
+
+  const totalMentions = 12847;
+  const positiveRate = 62;
+  const negativeRate = 18;
+  const neutralRate = 20;
+  const avgEngagement = 4238;
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
+    <div className="min-h-screen bg-background p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Мониторинг упоминаний</h1>
+            <p className="text-muted-foreground">Социально-политическая аналитика брендов</p>
+          </div>
+          <Button>
+            <Icon name="Download" className="mr-2 h-4 w-4" />
+            Экспорт
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Всего упоминаний</CardTitle>
+              <Icon name="MessageSquare" className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{totalMentions.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                <span className="text-green-600">↑ 12.5%</span> за последнюю неделю
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Позитивные</CardTitle>
+              <Icon name="ThumbsUp" className="h-4 w-4 text-green-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{positiveRate}%</div>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div className="bg-green-500 h-2 rounded-full" style={{ width: `${positiveRate}%` }}></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Негативные</CardTitle>
+              <Icon name="ThumbsDown" className="h-4 w-4 text-red-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{negativeRate}%</div>
+              <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                <div className="bg-red-500 h-2 rounded-full" style={{ width: `${negativeRate}%` }}></div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">Средний охват</CardTitle>
+              <Icon name="Users" className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{avgEngagement.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground mt-1">вовлечений на пост</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Тональность упоминаний</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Позитивные ({positiveRate}%)</span>
+                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * positiveRate / 100).toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="bg-green-500 h-3 rounded-full" style={{ width: `${positiveRate}%` }}></div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Нейтральные ({neutralRate}%)</span>
+                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * neutralRate / 100).toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="bg-gray-400 h-3 rounded-full" style={{ width: `${neutralRate}%` }}></div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Негативные ({negativeRate}%)</span>
+                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * negativeRate / 100).toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="bg-red-500 h-3 rounded-full" style={{ width: `${negativeRate}%` }}></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <CardTitle className="text-xl">Последние упоминания</CardTitle>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <Input
+                  placeholder="Поиск..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full sm:w-64"
+                />
+                <Select value={filterPlatform} onValueChange={setFilterPlatform}>
+                  <SelectTrigger className="w-full sm:w-40">
+                    <SelectValue placeholder="Платформа" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все платформы</SelectItem>
+                    <SelectItem value="Twitter">Twitter</SelectItem>
+                    <SelectItem value="Facebook">Facebook</SelectItem>
+                    <SelectItem value="VK">VK</SelectItem>
+                    <SelectItem value="LinkedIn">LinkedIn</SelectItem>
+                    <SelectItem value="Instagram">Instagram</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={filterSentiment} onValueChange={setFilterSentiment}>
+                  <SelectTrigger className="w-full sm:w-40">
+                    <SelectValue placeholder="Тональность" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Все</SelectItem>
+                    <SelectItem value="positive">Позитивные</SelectItem>
+                    <SelectItem value="neutral">Нейтральные</SelectItem>
+                    <SelectItem value="negative">Негативные</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Платформа</TableHead>
+                  <TableHead>Автор</TableHead>
+                  <TableHead className="max-w-md">Содержание</TableHead>
+                  <TableHead>Тональность</TableHead>
+                  <TableHead>Охват</TableHead>
+                  <TableHead>Время</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredMentions.map((mention) => (
+                  <TableRow key={mention.id}>
+                    <TableCell className="font-medium">{mention.platform}</TableCell>
+                    <TableCell>{mention.author}</TableCell>
+                    <TableCell className="max-w-md truncate">{mention.content}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="gap-1">
+                        <div className={`w-2 h-2 rounded-full ${getSentimentColor(mention.sentiment)}`}></div>
+                        {getSentimentText(mention.sentiment)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{mention.engagement.toLocaleString()}</TableCell>
+                    <TableCell className="text-muted-foreground text-sm">{mention.timestamp}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
-};
-
-export default Index;
+}
