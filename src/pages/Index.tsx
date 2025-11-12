@@ -20,18 +20,18 @@ interface Mention {
 const mockMentions: Mention[] = [
   {
     id: '1',
-    platform: 'Twitter',
-    author: '@techreviewer',
-    content: 'Отличный продукт! Рекомендую всем коллегам по индустрии.',
+    platform: 'VK',
+    author: 'Иван Соколов',
+    content: 'Поддерживаю инициативу партии! Важно отстаивать интересы трудящихся.',
     sentiment: 'positive',
     engagement: 1243,
     timestamp: '2025-11-12 14:32'
   },
   {
     id: '2',
-    platform: 'Facebook',
-    author: 'Ivan Petrov',
-    content: 'Качество могло бы быть лучше, ожидал большего.',
+    platform: 'VK',
+    author: 'Мария Петрова',
+    content: 'Не согласна с некоторыми решениями, нужен более взвешенный подход.',
     sentiment: 'negative',
     engagement: 567,
     timestamp: '2025-11-12 13:15'
@@ -39,26 +39,26 @@ const mockMentions: Mention[] = [
   {
     id: '3',
     platform: 'VK',
-    author: 'Anna K.',
-    content: 'Интересное решение для бизнеса, присматриваюсь.',
+    author: 'Александр К.',
+    content: 'Интересная позиция по социальным вопросам.',
     sentiment: 'neutral',
     engagement: 234,
     timestamp: '2025-11-12 12:08'
   },
   {
     id: '4',
-    platform: 'LinkedIn',
-    author: 'Sergey M.',
-    content: 'Впечатляющие результаты внедрения! Команда молодцы.',
+    platform: 'VK',
+    author: 'Сергей Михайлов',
+    content: 'Хорошая работа с избирателями! Продолжайте в том же духе.',
     sentiment: 'positive',
     engagement: 892,
     timestamp: '2025-11-12 11:45'
   },
   {
     id: '5',
-    platform: 'Instagram',
-    author: '@business_insider',
-    content: 'Стандартное предложение на рынке.',
+    platform: 'VK',
+    author: 'Анна Васильева',
+    content: 'Посмотрим, что будет дальше.',
     sentiment: 'neutral',
     engagement: 445,
     timestamp: '2025-11-12 10:22'
@@ -67,7 +67,6 @@ const mockMentions: Mention[] = [
 
 export default function Index() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterPlatform, setFilterPlatform] = useState('all');
   const [filterSentiment, setFilterSentiment] = useState('all');
 
   const getSentimentColor = (sentiment: string) => {
@@ -97,9 +96,8 @@ export default function Index() {
       searchTerm === '' ||
       mention.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mention.author.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPlatform = filterPlatform === 'all' || mention.platform === filterPlatform;
     const matchesSentiment = filterSentiment === 'all' || mention.sentiment === filterSentiment;
-    return matchesSearch && matchesPlatform && matchesSentiment;
+    return matchesSearch && matchesSentiment;
   });
 
   const totalMentions = 12847;
@@ -230,19 +228,6 @@ export default function Index() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full sm:w-64"
                 />
-                <Select value={filterPlatform} onValueChange={setFilterPlatform}>
-                  <SelectTrigger className="w-full sm:w-40">
-                    <SelectValue placeholder="Платформа" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Все платформы</SelectItem>
-                    <SelectItem value="Twitter">Twitter</SelectItem>
-                    <SelectItem value="Facebook">Facebook</SelectItem>
-                    <SelectItem value="VK">VK</SelectItem>
-                    <SelectItem value="LinkedIn">LinkedIn</SelectItem>
-                    <SelectItem value="Instagram">Instagram</SelectItem>
-                  </SelectContent>
-                </Select>
                 <Select value={filterSentiment} onValueChange={setFilterSentiment}>
                   <SelectTrigger className="w-full sm:w-40">
                     <SelectValue placeholder="Тональность" />
@@ -261,7 +246,6 @@ export default function Index() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Платформа</TableHead>
                   <TableHead>Автор</TableHead>
                   <TableHead className="max-w-md">Содержание</TableHead>
                   <TableHead>Тональность</TableHead>
@@ -272,8 +256,7 @@ export default function Index() {
               <TableBody>
                 {filteredMentions.map((mention) => (
                   <TableRow key={mention.id}>
-                    <TableCell className="font-medium">{mention.platform}</TableCell>
-                    <TableCell>{mention.author}</TableCell>
+                    <TableCell className="font-medium">{mention.author}</TableCell>
                     <TableCell className="max-w-md truncate">{mention.content}</TableCell>
                     <TableCell>
                       <Badge variant="outline" className="gap-1">
