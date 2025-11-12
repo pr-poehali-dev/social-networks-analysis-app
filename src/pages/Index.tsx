@@ -111,10 +111,22 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">Мониторинг упоминаний</h1>
             <p className="text-muted-foreground">Социально-политическая аналитика брендов</p>
+            <div className="flex items-center gap-2 mt-3">
+              <Icon name="ExternalLink" className="h-4 w-4 text-muted-foreground" />
+              <a 
+                href="https://vk.com/kprfkomi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-sm text-primary hover:underline"
+              >
+                vk.com/kprfkomi
+              </a>
+              <Badge variant="outline" className="ml-2">Активный источник</Badge>
+            </div>
           </div>
           <Button>
             <Icon name="Download" className="mr-2 h-4 w-4" />
