@@ -106,6 +106,16 @@ export default function Index() {
   const neutralRate = 20;
   const avgEngagement = 4238;
 
+  const weeklyActivity = [
+    { day: 'Пн', posts: 45, maxPosts: 78 },
+    { day: 'Вт', posts: 52, maxPosts: 78 },
+    { day: 'Ср', posts: 78, maxPosts: 78 },
+    { day: 'Чт', posts: 63, maxPosts: 78 },
+    { day: 'Пт', posts: 71, maxPosts: 78 },
+    { day: 'Сб', posts: 38, maxPosts: 78 },
+    { day: 'Вс', posts: 29, maxPosts: 78 }
+  ];
+
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -184,38 +194,64 @@ export default function Index() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xl">Тональность упоминаний</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Позитивные ({positiveRate}%)</span>
-                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * positiveRate / 100).toLocaleString()}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div className="bg-green-500 h-3 rounded-full" style={{ width: `${positiveRate}%` }}></div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Тональность упоминаний</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Позитивные ({positiveRate}%)</span>
+                  <span className="text-sm text-muted-foreground">{Math.round(totalMentions * positiveRate / 100).toLocaleString()}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="bg-green-500 h-3 rounded-full" style={{ width: `${positiveRate}%` }}></div>
+                </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Нейтральные ({neutralRate}%)</span>
-                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * neutralRate / 100).toLocaleString()}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div className="bg-gray-400 h-3 rounded-full" style={{ width: `${neutralRate}%` }}></div>
-              </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Нейтральные ({neutralRate}%)</span>
+                  <span className="text-sm text-muted-foreground">{Math.round(totalMentions * neutralRate / 100).toLocaleString()}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="bg-gray-400 h-3 rounded-full" style={{ width: `${neutralRate}%` }}></div>
+                </div>
 
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Негативные ({negativeRate}%)</span>
-                <span className="text-sm text-muted-foreground">{Math.round(totalMentions * negativeRate / 100).toLocaleString()}</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Негативные ({negativeRate}%)</span>
+                  <span className="text-sm text-muted-foreground">{Math.round(totalMentions * negativeRate / 100).toLocaleString()}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3">
+                  <div className="bg-red-500 h-3 rounded-full" style={{ width: `${negativeRate}%` }}></div>
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div className="bg-red-500 h-3 rounded-full" style={{ width: `${negativeRate}%` }}></div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">Активность по дням недели</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {weeklyActivity.map((item) => (
+                  <div key={item.day} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium w-8">{item.day}</span>
+                      <span className="text-sm text-muted-foreground">{item.posts} публикаций</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${(item.posts / item.maxPosts) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
 
         <Card>
           <CardHeader>
