@@ -16,6 +16,7 @@ interface Mention {
   engagement: number;
   timestamp: string;
   views: number;
+  url: string;
 }
 
 const mockMentions: Mention[] = [
@@ -27,7 +28,8 @@ const mockMentions: Mention[] = [
     sentiment: 'positive',
     engagement: 1243,
     timestamp: '2025-11-12 14:32',
-    views: 12450
+    views: 12450,
+    url: 'https://vk.com/wall-12345678_9876'
   },
   {
     id: '2',
@@ -37,7 +39,8 @@ const mockMentions: Mention[] = [
     sentiment: 'negative',
     engagement: 567,
     timestamp: '2025-11-12 13:15',
-    views: 8920
+    views: 8920,
+    url: 'https://vk.com/wall-12345678_9875'
   },
   {
     id: '3',
@@ -47,7 +50,8 @@ const mockMentions: Mention[] = [
     sentiment: 'neutral',
     engagement: 234,
     timestamp: '2025-11-12 12:08',
-    views: 5670
+    views: 5670,
+    url: 'https://vk.com/wall-12345678_9874'
   },
   {
     id: '4',
@@ -57,7 +61,8 @@ const mockMentions: Mention[] = [
     sentiment: 'positive',
     engagement: 892,
     timestamp: '2025-11-12 11:45',
-    views: 15230
+    views: 15230,
+    url: 'https://vk.com/wall-12345678_9873'
   },
   {
     id: '5',
@@ -67,7 +72,8 @@ const mockMentions: Mention[] = [
     sentiment: 'neutral',
     engagement: 445,
     timestamp: '2025-11-12 10:22',
-    views: 7890
+    views: 7890,
+    url: 'https://vk.com/wall-12345678_9872'
   }
 ];
 
@@ -294,6 +300,7 @@ export default function Index() {
                   <TableHead>Просмотры</TableHead>
                   <TableHead>Охват</TableHead>
                   <TableHead>Время</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -315,6 +322,17 @@ export default function Index() {
                     </TableCell>
                     <TableCell>{mention.engagement.toLocaleString()}</TableCell>
                     <TableCell className="text-muted-foreground text-sm">{mention.timestamp}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        asChild
+                      >
+                        <a href={mention.url} target="_blank" rel="noopener noreferrer">
+                          <Icon name="ExternalLink" className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
